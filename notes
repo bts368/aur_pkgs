@@ -1,0 +1,11 @@
+to do updates on ALL pkgbuilds (meta stuff), you'll want to increment the pkgrel:
+
+for i in $(find ./ -type f -name PKGBUILD);
+do
+	PKGVER=$(egrep '^pkgrel=' ${i} | cut -f2 -d"=" | sed -e "s/'//g" -e 's/"//g' -e 's/[[:space:]]*//g')
+	PKGVER=$((PKGVER+1))
+	sed -i -e "s/^pkgrel=.*$/pkgrel=${PKGVER}/g" ${i}
+done
+
+
+similar loops can help with e.g. adding PGP keys, etc.
