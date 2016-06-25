@@ -70,3 +70,5 @@ then
 fi
 
 git submodule update
+git add --all .
+git commit -m "adding submodules"
