@@ -1,0 +1,132 @@
+[submodule "boxbackup-client"]
+	path = boxbackup-client
+	url = aur@aur.archlinux.org:boxbackup-client
+[submodule "boxbackup-server"]
+	path = boxbackup-server
+	url = aur@aur.archlinux.org:boxbackup-server
+[submodule "buffer"]
+	path = buffer
+	url = aur@aur.archlinux.org:buffer
+[submodule "burp-backup-git"]
+	path = burp-backup-git
+	url = aur@aur.archlinux.org:burp-backup-git
+[submodule "chapcrack-git"]
+	path = chapcrack-git
+	url = aur@aur.archlinux.org:chapcrack-git
+[submodule "debianutils"]
+	path = debianutils
+	url = aur@aur.archlinux.org:debianutils
+[submodule "djohn"]
+	path = djohn
+	url = aur@aur.archlinux.org:djohn
+[submodule "dumpet"]
+	path = dumpet
+	url = aur@aur.archlinux.org:dumpet
+[submodule "ejabberd-mod_all-git"]
+	path = ejabberd-mod_all-git
+	url = aur@aur.archlinux.org:ejabberd-mod_all-git
+[submodule "ezquake-git"]
+	path = ezquake-git
+	url = aur@aur.archlinux.org:ezquake-git
+[submodule "fixtar-git"]
+	path = fixtar-git
+	url = aur@aur.archlinux.org:fixtar-git
+[submodule "freeswitch"]
+	path = freeswitch
+	url = aur@aur.archlinux.org:freeswitch
+[submodule "freeswitch-git"]
+	path = freeswitch-git
+	url = aur@aur.archlinux.org:freeswitch-git
+[submodule "freeswitch-lite"]
+	path = freeswitch-lite
+	url = aur@aur.archlinux.org:freeswitch-lite
+[submodule "iozone"]
+	path = iozone
+	url = aur@aur.archlinux.org:iozone
+[submodule "johnny-git"]
+	path = johnny-git
+	url = aur@aur.archlinux.org:johnny-git
+[submodule "kismet-allplugins"]
+	path = kismet-allplugins
+	url = aur@aur.archlinux.org:kismet-allplugins
+[submodule "libyuv-git"]
+	path = libyuv-git
+	url = aur@aur.archlinux.org:libyuv-git
+[submodule "mbr"]
+	path = mbr
+	url = aur@aur.archlinux.org:mbr
+[submodule "mdcrack"]
+	path = mdcrack
+	url = aur@aur.archlinux.org:mdcrack
+[submodule "memtester"]
+	path = memtester
+	url = aur@aur.archlinux.org:memtester
+[submodule "mindi"]
+	path = mindi
+	url = aur@aur.archlinux.org:mindi
+[submodule "mindi-busybox"]
+	path = mindi-busybox
+	url = aur@aur.archlinux.org:mindi-busybox
+[submodule "mondo"]
+	path = mondo
+	url = aur@aur.archlinux.org:mondo
+[submodule "nquake"]
+	path = nquake
+	url = aur@aur.archlinux.org:nquake
+[submodule "nwipe-git"]
+	path = nwipe-git
+	url = aur@aur.archlinux.org:nwipe-git
+[submodule "pack"]
+	path = pack
+	url = aur@aur.archlinux.org:pack
+[submodule "python2-dpkt"]
+	path = python2-dpkt
+	url = aur@aur.archlinux.org:python2-dpkt
+[submodule "python-semantic_version"]
+	path = python-semantic_version
+	url = aur@aur.archlinux.org:python-semantic_version
+[submodule "quake2world-data-git"]
+	path = quake2world-data-git
+	url = aur@aur.archlinux.org:quake2world-data-git
+[submodule "quake2world-git"]
+	path = quake2world-git
+	url = aur@aur.archlinux.org:quake2world-git
+[submodule "rcracki_mt"]
+	path = rcracki_mt
+	url = aur@aur.archlinux.org:rcracki_mt
+[submodule "scrounge-ntfs"]
+	path = scrounge-ntfs
+	url = aur@aur.archlinux.org:scrounge-ntfs
+[submodule "sipcrack"]
+	path = sipcrack
+	url = aur@aur.archlinux.org:sipcrack
+[submodule "spearmint"]
+	path = spearmint
+	url = aur@aur.archlinux.org:spearmint
+[submodule "spearmint-git"]
+	path = spearmint-git
+	url = aur@aur.archlinux.org:spearmint-git
+[submodule "storcli"]
+	path = storcli
+	url = aur@aur.archlinux.org:storcli
+[submodule "sucrack"]
+	path = sucrack
+	url = aur@aur.archlinux.org:sucrack
+[submodule "swatd-git"]
+	path = swatd-git
+	url = aur@aur.archlinux.org:swatd-git
+[submodule "truecrack-git"]
+	path = truecrack-git
+	url = aur@aur.archlinux.org:truecrack-git
+[submodule "weplab"]
+	path = weplab
+	url = aur@aur.archlinux.org:weplab
+[submodule "wifite-mod-pixiewps-git"]
+	path = wifite-mod-pixiewps-git
+	url = aur@aur.archlinux.org:wifite-mod-pixiewps-git
+[submodule "wpscrack"]
+	path = wpscrack
+	url = aur@aur.archlinux.org:wpscrack
+[submodule "zandronum-dev"]
+	path = zandronum-dev
+	url = aur@aur.archlinux.org:zandronum-dev
