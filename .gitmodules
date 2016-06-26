@@ -130,3 +130,6 @@
 [submodule "zandronum-dev"]
 	path = zandronum-dev
 	url = aur@aur.archlinux.org:zandronum-dev
+[submodule "augeas-git"]
+	path = augeas-git
+	url = aur@aur.archlinux.org:augeas-git

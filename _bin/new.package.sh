@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+set -x
 
 
 ## SETTINGS ##
@@ -47,12 +48,36 @@ read PKGCHK
 
 
 ## CREATE THE REPO/PACKAGE IN AUR ##
+cd /tmp
 git clone aur@aur.archlinux.org:${PKGNAME}
-#mkdir -p ${PKGNAME}
+cd /tmp/${PKGNAME}
+cat >> .gitignore << EOF
+*/
+.*.swp
+*.pkg.tar.xz
+src/
+pkg/
+*.tar
+*.tar.bz2
+*.tar.xz
+*.tar.gz
+*.tgz
+*.txz
+*.tbz
+*.tbz2
+*.zip
+*.run
+*.7z
+*.rar
+*.deb
+EOF
+git add .gitignore
 
 ## DROP IN A VANILLA PKGBUILD ##
-cat > ${PKGNAME}/PKGBUILD << EOF
+cat > PKGBUILD << EOF
 # Maintainer: ${MAINTNAME}
+# Bug reports can be filed at https://bugs.square-r00t.net/index.php?project=3
+# News updates for packages can be followed at https://devblog.square-r00t.net
 validpgpkeys=('${GPGKEY}')
 pkgname=${PKGNAME}
 pkgver=${PKGVER}
@@ -76,7 +101,7 @@ else
 	STRIPPKG="${PKGNAME}"
 fi
 
-cat >> ${PKGNAME}/PKGBUILD << EOF
+cat >> PKGBUILD << EOF
 _pkgname=${STRIPPKG}
 #_pkgname2='%%OPTIONAL SHORTHAND PACKAGE NAME%%'
 EOF
@@ -84,12 +109,12 @@ EOF
 
 if [[ -n "${GITPKG}" ]];
 then
-	cat >> ${PKGNAME}/PKGBUILD << EOF
+	cat >> PKGBUILD << EOF
 source=("\${_pkgname}::git+https://github.com/\${_pkgname}/\${_pkgname}.git")
 sha512sums=('SKIP')
 EOF
 else
-	cat >> ${PKGNAME}/PKGBUILD << EOF
+	cat >> PKGBUILD << EOF
 source=("https://\${pkgname}.com/\${_pkgname}/\${_pkgname}-\${pkgver}.tar.gz"
 	"\${_pkgname}-\${pkgver}.tar.gz.sig")
 sha512sums=('cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e'
@@ -97,14 +122,14 @@ sha512sums=('cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d
 EOF
 fi
 
-cat >> ${PKGNAME}/PKGBUILD << EOF
+cat >> PKGBUILD << EOF
 provides=("\${_pkgname}")
 #conflicts=("\${_pkgname}")
 EOF
 
 if [[ -n "${GITPKG}" ]];
 then
-	cat >> ${PKGNAME}/PKGBUILD << EOF
+	cat >> PKGBUILD << EOF
 pkgver() {
   cd "\${srcdir}/\${_pkgname}"
   (
@@ -118,7 +143,7 @@ pkgver() {
 EOF
 fi
 
-cat >> ${PKGNAME}/PKGBUILD << EOF
+cat >> PKGBUILD << EOF
 
 build() {
 	cd "\${srcdir}/\${_pkgname}/src"
@@ -131,7 +156,20 @@ package() {
 }
 EOF
 
-cd ${PKGNAME}
+# now we need to commit the thing since apparently we can't add empty repos as submodules...?
+mksrcinfo
+git add --all .
+git commit -m "initial commit; setting up .gitignores and skeleton PKGBUILD"
+git push origin master
+cd /tmp
+rm -rf ${PKGNAME}
+
+
+cd ${PKGBUILD_DIR}
+git submodule add --force aur@aur.archlinux.org:${PKGNAME}
+#git submodule init ${PKGNAME}
+#git submodule update ${PKGNAME}
+cd ${PKGBUILD_DIR}/${PKGNAME}
 cat >> $(git rev-parse --git-dir)/hooks/pre-commit << EOF
 #!/bin/bash
 
@@ -139,29 +177,4 @@ cat >> $(git rev-parse --git-dir)/hooks/pre-commit << EOF
 
 git add .SRCINFO
 EOF
-
 chmod 700 $(git rev-parse --git-dir)/hooks/pre-commit
-
-cat >> ${PKGNAME}/.gitignore << EOF
-*/
-.*.swp
-*.pkg.tar.xz
-src/
-pkg/
-*.tar
-*.tar.bz2
-*.tar.xz
-*.tar.gz
-*.tgz
-*.txz
-*.tbz
-*.tbz2
-*.zip
-*.run
-*.7z
-*.rar
-*.deb
-EOF
-
-
-cd ${PKGNAME}
