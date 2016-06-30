@@ -1,7 +1,9 @@
 #!/bin/bash
 
 
-
+# You can get a list of your private identities with gpg -K.
+# You can get the exact string with:
+# - gpg -K --fingerprint --with-colons [<your identity, e.g. joeshmoe@joe.com>] | egrep '^fpr:' | cut -f10 -d":"
 GPGKEY='748231EBCBD808A14F5E85D28C004C2F93481F6B'
 PKGBUILD_DIR='/opt/dev/arch'
 
