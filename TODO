@@ -1,6 +1,0 @@
-acpidump burp cjdcmd-git clamav-milter cryptcat gummiboot irssi-script-sasl irssi-script-spellcheck irssi-script-trackbar rpm socat2 vim-netrw
-
-also implement https://github.com/thp/urlwatch support because:
--it's in the repos
--it's a bit more handy than pkgoutofdate
--Pushover support via chump \o/

@@ -1,0 +1,192 @@
+######################################################################################################################################
+#####                                                       AUR maintenance                                                      #####
+#####                                                                                                                            #####
+#####    Written by Brent Saner                                                                                                  #####
+#####    <bts@square-r00t.net>                                                                                                   #####
+#####    Source available at https://git.square-r00t.net/AUR_pkgs  Bugs at https://bugs.square-r00t.net/index.php?project=4      #####
+######################################################################################################################################
+
+I maintain[0] a lot of AUR (Arch User Repository)[1] packages for Arch Linux[2].
+
+A lot. 45 at the time of writing this document (06.30.2016).
+
+For the most part I don't need to do much. Watch for changes in upstream, tweak some version variables, sign the sources (if not a
+direct checkout from source control package[3]), makepkg[4] to test it, and send it on its way.
+But that's more time than I want to spend.
+
+So I have some scripts to help me easily handle adding packages, maintaining them, etc. and keep it all in a nice and tidy git
+repository using submodules. (In the future, I'll be offering an actual Arch repository for my packages so you can use it directly with
+pacman[5]). However, it's a simultaneous goal of mine to help out users who also want to package software for the AUR. That's what this
+document sets out to do.
+
+
+## Preparation/Starting ##
+	# Customizing the Scripts #
+	You'll want to edit the PKGBUILD_DIR variable (submodule.update.sh, new.package.sh, and sign.package.sh), the GPGKEY variable
+(new.package.sh and sign.package.sh), and the MAINTNAME variable (in new.package.sh) before running anything. If you don't have a
+GPG key yet, keep reading (and remember to do it afterwards!).
+
+	# Finding a Package #
+	If you don't yet have a package in mind that you WANT packaged and are more interested in helping out the community, there are
+a lot of packages that used to have a maintainer but no longer do. These are called "Orphan" packages.
+
+	Adopting an orphan package is a great start to getting involved with packaging as you'll have a base PKGBUILD already from the
+previous maintainer and you'll be providing a package that has been desired. I recommend finding an orphan with a high number of votes[6]
+to adopt. Make sure it hasn't been moved to [Community] or another Arch repository!
+
+	# Keys #
+	The AUR, along with being quite fast in processing packages, also is fairly secure. It uses SSH-controlled git to manage
+read/write permissions (pro-tip: you can add other AUR users as co-maintainers of your packages!), and offers a place for you to put a
+GPG key fingerprint to sign the sources with (which is HIGHLY recommended!).
+
+		# SSH #
+		While not *strictly* necessary, you can create a separate SSH key for the AUR. This is recommended, however, as it can
+make for easier package maintenance across different hosts/users and separate your normal access SSH keys from your AUR access, which
+is a little less of a security risk (especially since we'll be signing our packages later on).
+
+		If you have no idea what SSH public key authentication is, that's fine. We'll be generating a new key. First, I highly
+recommend using either a 4096-bit RSA or a ED25519 key. For simplicity's sake, let's use ED25519 (since it's preferred[7] anyways). Run
+as the user you plan on committing packages (i.e. WITHOUT sudo/NOT as the root user):
+
+	ssh-keygen -t ed25519 -o -a 100
+
+		The default paths are ideal and while password-protecting your key isn't necessary (and may get cumbersome if you plan
+on updating a lot of packages at once), it's recommended.
+
+		Next we need to copy your public key (it is PERFECTLY safe to give this out, as it is designed to be publicly exposed):
+
+	cat ~/.ssh/ed25519.pub
+
+		MAKE SURE you are copying and pasting the file that ends in .pub! The file without the ".pub" at the end should be kept
+totally secret, don't give it out to anyone. It should be one line only.
+
+		Hold onto that, maybe put it in a gvim session or something- you'll need it in a bit.
+
+
+		# GPG #
+		This step is also not necessary, but if you plan on using the _bin/ scripts as part of this project, it is. It also
+provides added assurance for your users that YOU packaged them and increases the overall security (plus you can use your GPG key for
+a whole slew of other things like encryption and the like. It's very handy!).
+
+		First you need to generate a GPG keypair (if you haven't already).
+
+	gpg --full-gen-key
+
+		You will want to make sure you have an appropriate version of pinentry linked (i.e. if you're on a terminal-only machine,
+"sudo ln -sf /usr/bin/pinentry-curses /usr/bin/pinentry" on an Arch system) beforehand. The default for expiration (0) should be fine.
+When prompted for the kind of key, accept the default (RSA and RSA). I recommend changing the keysize to 4096 instead of 2048 (speed isn't
+a concern for us). You'll be prompted for your real name (i.e. first/last)- you can use an alias here if you have privacy concerns, but
+know that you should use one that matches your AUR username AND the name you use as the Maintainer in your PKGBUILDs. You'll also be prompted
+for an email- be sure to use a valid one, though feel free to use one that doesn't have your real name attached. As for comment, feel free
+to put anything in here- if this is a key you're generating explicity for use with the AUR, I recommend your AUR username here, or your
+personal website URL. You'll be prompted if it's okay- if you don't need to edit anything, enter "o" (without quotes).
+
+		Then you'll need to come up with a strong password. I mean really strong. It should be at least 16 random characters,
+mixed-case, letters + numbers + symbols. REMEMBER IT AND DON'T WRITE IT DOWN. Re-enter to confirm.
+
+		Next it will try to generate the key- if you don't have a lot of entropy available, this can take a LOOONG time. If that's
+the case, install and run "haveged".
+
+		When it's done, it'll print your key for you. It should look something like this:
+
+		gpg: /home/username/.gnupg/trustdb.gpg: trustdb created
+		gpg: key 9C4CD61F marked as ultimately trusted
+		gpg: directory '/home/username/.gnupg/openpgp-revocs.d' created
+		gpg: revocation certificate stored as '/home/username/.gnupg/openpgp-revocs.d/80E0944D76EEA7B3F063FCEB26DDA3589C4CD61F.rev'
+		public and secret key created and signed.
+		
+		gpg: checking the trustdb
+		gpg: marginals needed: 3  completes needed: 1  trust model: pgp
+		gpg: depth: 0  valid:   3  signed:  12  trust: 0-, 0q, 0n, 0m, 0f, 3u
+		gpg: depth: 1  valid:  12  signed:   1  trust: 1-, 0q, 0n, 6m, 5f, 0u
+		gpg: depth: 2  valid:   1  signed:   0  trust: 1-, 0q, 0n, 0m, 0f, 0u
+		gpg: next trustdb check due at 2016-07-04
+		pub   rsa4096/9C4CD61F 2016-07-01 [S]
+		      Key fingerprint = 80E0 944D 76EE A7B3 F063  FCEB 26DD A358 9C4C D61F
+		uid         [ultimate] test user (testuser) <test@email.com>
+		sub   rsa4096/A677BC22 2016-07-01 []
+
+		Now we need to grab our key ID and fingerprint. They're essentially the same, but the Fingerprint is broken up into
+four-character sections. In the above example, the full ("long") key ID is 80E0944D76EEA7B3F063FCEB26DDA3589C4CD61F, the short form is 9C4CD61F
+(the last 16), and the fingerprint is 80E0 944D 76EE A7B3 F063  FCEB 26DD A358 9C4C D61F.
+
+		Hold onto that information (the key ID and fingerprint). If you forget it, you can get it again by:
+
+	gpg -K --fingerprint --with-colons <your identity> | egrep '^fpr:' | cut -f10 -d":"
+
+		Where <your identity> is the email address you have associated with the key. If you forget THAT, you can get a list of
+identities you have private keys for by doing "gpg -K".
+
+
+	# Registering in the AUR
+	Make sure you register[8] on the AUR[1,9]. Add the SSH pubkey and GPG Fingerprint from above.
+
+	Once done, to test (and initialize your AUR backend repositority), do:
+
+	ssh aur@aur.archlinux.org help
+
+	If it returns "Permission denied (publickey).", make sure you have the proper public key pasted in your user settings on the AUR.
+
+
+## Registering a Package ##
+
+	There are three ways to go about this:
+
+	* If it's a brand new package, simply do:
+
+			git clone aur@aur.archlinux.org:<packagename>
+
+		(where <packagename> is the name of the package you want to add. No spaces, etc.)
+
+	* If it's an orphaned package, you can simply click on the "Adopt Package" link on the right on a package's page (once logged into the AUR),
+		then cloning as normally.
+
+	* If it's a package that used to exist in the AUR but was removed (and doesn't exist in the Arch official repositories), you can do:
+
+			ssh aur@aur.archlinux.org restore <packagename>
+
+		(where <packagename> is the name of the package you want to reintroduce. No spaces, etc.)
+
+	Congratulations! That package now belongs to you, and it is your responsibility to keep it up to date, cleanly building, and secure. (At least
+until it's hopefully adopted into the Community repository!)
+
+
+## Using this Project ##
+
+	Now that you have a package (or more), you can make use of the scripts this project offers.
+
+	After cloning, you'll want to remove all of my packages (from within the directory):
+
+		git submodule deinit -f .
+		for i in $(find ./ -maxdepth 1 -type d | sed -re 's@\./@@g' -e '/^(\.git|_|$)/d');
+		do
+		  rm -r "${i}"
+		  rm -rf .git/modules/"${i}"
+		  git config -f .gitmodules --remove-section "submodule.${i}"
+		done
+
+	And then you can add your own packages:
+		_bin/submodule.update.sh
+
+	Done!
+
+
+## Tips/Tricks ##
+
+	I recommend using _bin/new.package.sh for adding a new package, as it uses a nice generic PKGBUILD, sets up a good .gitignore, etc.
+
+	I also encourage you to set up something similar to (and follow along with!) my devblog[10]. This provides a more detailed way of conveying
+information than the sometimes lacking AUR web interface.
+
+
+[0] https://aur.archlinux.org/packages/?SeB=m&K=sanerb
+[1] https://wiki.archlinux.org/index.php/Aur
+[2] https://www.archlinux.org/
+[3] https://wiki.archlinux.org/index.php/VCS_package_guidelines
+[4] https://wiki.archlinux.org/index.php/Makepkg
+[5] https://wiki.archlinux.org/index.php/pacman
+[6] https://aur.archlinux.org/packages/?O=0&SeB=nd&K=&outdated=&SB=v&SO=d&PP=50&do_Orphans=Orphans
+[7] https://stribika.github.io/2015/01/04/secure-secure-shell.html
+[8] https://aur.archlinux.org/register/
+[9] https://wiki.archlinux.org/index.php/Arch_User_Repository#Submitting_packages
+[10] https://devblog.square-r00t.net
