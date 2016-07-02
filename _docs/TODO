@@ -5,3 +5,5 @@ also implement https://github.com/thp/urlwatch support because:
 -it's in the repos
 -it's a bit more handy than pkgoutofdate
 -Pushover support via chump \o/
+
+in README, need to mention HOW to use scripts- and how to sign packages, how to upload GPG key to keyservers, etc.
