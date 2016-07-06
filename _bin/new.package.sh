@@ -10,42 +10,145 @@ set -e
 GPGKEY='748231EBCBD808A14F5E85D28C004C2F93481F6B'  # https://wiki.archlinux.org/index.php/PKGBUILD#validpgpkeys
 MAINTNAME='brent s. <bts[at]square-r00t[dot]net>'
 PKGBUILD_DIR='/opt/dev/arch'
+AUR_PKGS_DIR="${PKGBUILD_DIR}"  # should be the dir where the aur_pkgs dir lives
 
-# These shouldn't be touched.
-PKGNAME=${1}
-PKGVER="${2}"
+# Get PKGTYPE
+PS3='What type of package is this?: '
+options=("Release/Versioned" "VCS (Git, SVN, Mercurial, etc.)" "Quit")
+select opt in "${options[@]}"
+do
+    case ${opt} in
+        "Release/Versioned")
+            PKGTYPE="release"
+            ;;
+        "VCS (Git, SVN, Mercurial, etc.)")
+            PKGTYPE="vcs"
+            ;;
+        "Quit")
+            exit 0
+            ;;
+        *) echo invalid option;;
+    esac
+done
 
+# get VCSTYPE, if it's a source package
+if [[ "${PKGTYPE}" == 'vcs' ]];
+then
+	PS3='What type of version-control?: '
+	options=("Git" "Subversion" "Mercurial" "Bazaar" "(Other)" "Quit")
+	select opt in "${options[@]}"
+	do
+	    case ${opt} in
+	        "Git")
+	            VCSTYPE='git'
+	            ;;
+	        "Subversion")
+	            VCSTYPE='svn'
+	            ;;
+		"Bazaar")
+		    VCSTYPE='bzr'
+	            ;;
+		"(Other)")
+		    VCSTYPE='unknown'
+	            ;;
+	        "Quit")
+	            exit 0
+	            ;;
+	        *) echo invalid option;;
+	    esac
+	done
+fi
 
-## SANITY ##
+# get PKGNAME
+echo -ne "\nWhat is the NAME of the package? (Exclude VCS type if it's a source-control package,\nthat will be prepended automatically): "
+read PKGNAME
+echo
+
+# check PKGNAME
 set +e  # disable bail-on-error because we want a non-zero if a package name is not right, etc.
-mkdir -p ${PKGBUILD_DIR}
-cd ${PKGBUILD_DIR}
-echo "${PKGNAME}" | egrep -Eq '^([a-z0-9\_]|-)+$'
+echo "${PKGNAME}" | egrep -Eq '^([a-z0-9\_])+$'
 if [[ "${?}" -ne '0' ]];
 then
 	echo "ERROR: That does not seem to be a valid package name!"
 	exit
 fi
-echo "${PKGVER}" | egrep -Eq '^([0-9\.]|git|svn)+$'
-if [[ "${?}" -ne '0' ]];
-then
-	echo "ERROR: That does not seem to be a valid package version!"
-	echo "Acceptable values are numbers, .'s, or simply 'git'."
-	exit
-elif [[ "${PKGVER}" == 'git' || "${PKGVER}" == 'svn' ]];
-then
-	PKGVER='0.0.00001'
-	GITPKG='y'
-fi
-
-if [[ -z "${2}" ]];
-then
-	echo "USAGE: ${0} <package name> <package version>"
-	exit
-fi
 set -e
+_PKGNAME="${PKGNAME}"
+if [[ -n "${VCSTYPE}" && "${VCSTYPE}" != '' ]];
+then
+	PKGNAME="${PKGNAME}-${VCSTYPE}"
+fi
 
-echo "Will create a package named ${PKGNAME} with initial version of ${PKGVER}. Press enter to continue, or ctrl-C to quit."
+# Get the version to pre-populate the PKGBUILD with, if a release.
+if [[ "${PKGTYPE}" == 'release' ]];
+then
+	echo -n "What is the VERSION of the current release you are packaging for ${PKGNAME}? "
+	read PKGVER
+	set +e
+	echo "${PKGVER}" | egrep -Eq '^([0-9\.])+$'
+	if [[ "${?}" -ne '0' ]];
+	then
+		echo "ERROR: That does not seem to be a valid package version!"
+		echo "Acceptable values are numbers or .'s."
+		exit
+	fi
+	set -e
+	echo
+fi
+
+# Get other bits of info.
+# PKGDESC
+echo -ne "What is a DESCRIPTION of ${_PKGNAME}? (Do not include the package name- e.g.:\n  Provides a library for mutating teenage turtles\n) "
+read PKGDESC
+echo
+
+# PKGURL
+if [[ "${PKGTYPE}" == 'vcs' ]];
+then
+	echo -ne "What is the CHECKOUT URL for ${_PKGNAME}?\n(Do not include the directory or VCS type prefix as per https://wiki.archlinux.org/index.php/VCS_package_guidelines#VCS_sources - this is added automatically)  e.g.:\n  https://github.com/shinnok/johnny.git\nURL: "
+	read SRCURL
+	echo
+	PKGURL="${_PKGNAME}::${VCSTYPE}+${PKGURL}"
+	SRCFILE=''
+else
+	echo -n "What is the URL to the source tarball for ${PKGNAME} (version ${PKGVER})? "
+	read SRCURL
+	echo
+	SRCFILE=$(echo "${SRCURL}" | sed -re 's|^https?.*/(.*)$|\1|g')
+fi
+
+# LICENSE
+echo -n "What is the LICENSE for ${_PKGNAME}? "
+read LICENSE
+echo
+
+# DEPENDS
+echo -n "What does ${_PKGNAME} DEPEND on (for runtime)? if no packages, just hit enter. Make sure they correspond to Arch/AUR package names. "
+read PKGDEPS
+echo
+
+# OPTDEPENDS
+echo -ne "What is an OPTIONAL DEPENDENCY (runtime) for ${_PKGNAME}? If no packages, just hit enter. They should match the format:\n  pkgname:reason why\nOptional deps: "
+read OPTDEPS
+echo
+
+echo -e "What is a MAKE DEPEND for ${_PKGNAME}? If no packages, just hit enter. "
+read BUILDDEPS
+echo
+
+echo -e "What package names, if any besides itself, does ${_PKGNAME} PROVIDE? (If a VCS package, do not include the non-VCS package- that's added by default!) "
+read PROVIDES
+echo
+
+echo -e "What package names, if any besides itself, does ${_PKGNAME} CONFLICT with? (If a VCS package, do not include the non-VCS package- that's added by default!) "
+read CONFLICTS
+echo
+
+## SANITY ##
+mkdir -p ${PKGBUILD_DIR}
+cd ${PKGBUILD_DIR}
+
+echo "Will create a package named ${PKGNAME}. Press enter to continue, or ctrl-C to quit."
 read PKGCHK
 
 
@@ -53,110 +156,24 @@ read PKGCHK
 cd /tmp
 git clone aur@aur.archlinux.org:${PKGNAME}
 cd /tmp/${PKGNAME}
-cat >> .gitignore << EOF
-*/
-.*.swp
-*.pkg.tar.xz
-src/
-pkg/
-*.tar
-*.tar.bz2
-*.tar.xz
-*.tar.gz
-*.tgz
-*.txz
-*.tbz
-*.tbz2
-*.zip
-*.run
-*.7z
-*.rar
-*.deb
-EOF
+cp ${AUR_PKGS_DIR}/_docs/PKGBUILD.templates.d/gitignore .gitignore
 git add .gitignore
 
 ## DROP IN A VANILLA PKGBUILD ##
-cat > PKGBUILD << EOF
-# Maintainer: ${MAINTNAME}
-# Bug reports can be filed at https://bugs.square-r00t.net/index.php?project=3
-# News updates for packages can be followed at https://devblog.square-r00t.net
-validpgpkeys=('${GPGKEY}')
-pkgname=${PKGNAME}
-pkgver=${PKGVER}
-pkgrel=1
-pkgdesc="%%SOME DESCRIPTION HERE%%"
-arch=('i686' 'x86_64')
-url="%%SOME URL HERE%%"
-license=('%%SOME LICENSE(S) HERE%%')
-install=
-changelog=
-noextract=()
-#depends=('%%RUNTIME DEPENDENCIES HERE%%')
-#optdepends=('%%OPTIONAL DEPENDENCIES HERE (pkg: why needed)%%')
-#makedepends=('%%BUILDTIME DEPENDENCIES HERE%%')
-EOF
-
-if [[ -n "${GITPKG}" ]];
+if [[ "${PKGTYPE}" == 'vcs' ]];
 then
-	STRIPPKG=$(echo "${PKGNAME}" | sed -re 's/-(git|svn)//g')
+	cat ${AUR_PKGS_DIR}/_docs/PKGBUILD.templates.d/vcs/{00.*,01.*,02.*,03.*,04.*.${VCSTYPE},05.*,06.*} > PKGBUILD
 else
-	STRIPPKG="${PKGNAME}"
+	cat ${AUR_PKGS_DIR}/_docs/PKGBUILD.templates.d/release/* > PKGBUILD
+	touch "${SRCFILE}.sig"
 fi
 
-cat >> PKGBUILD << EOF
-_pkgname=${STRIPPKG}
-#_pkgname2='%%OPTIONAL SHORTHAND PACKAGE NAME%%'
-EOF
-
-
-if [[ -n "${GITPKG}" ]];
-then
-	cat >> PKGBUILD << EOF
-source=("\${_pkgname}::git+https://github.com/\${_pkgname}/\${_pkgname}.git")
-sha512sums=('SKIP')
-EOF
-else
-	cat >> PKGBUILD << EOF
-source=("https://\${pkgname}.com/\${_pkgname}/\${_pkgname}-\${pkgver}.tar.gz"
-	"\${_pkgname}-\${pkgver}.tar.gz.sig")
-sha512sums=('cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e'
-	    'SKIP')
-EOF
-fi
-
-cat >> PKGBUILD << EOF
-provides=("\${_pkgname}")
-#conflicts=("\${_pkgname}")
-EOF
-
-if [[ -n "${GITPKG}" ]];
-then
-	cat >> PKGBUILD << EOF
-pkgver() {
-  cd "\${srcdir}/\${_pkgname}"
-  (
-     printf "r%s.%s" "\$(git rev-list --count HEAD)" "\$(git rev-parse --short HEAD)"
-  #( set -o pipefail
-  #  git describe --long --tags 2>/dev/null | sed 's/\\([^-]*-g\\)/r\\1/;s/-/./g' ||
-  #  printf "r%s.%s" "\$(git rev-list --count HEAD)" "\$(git rev-parse --short HEAD)"
-  #)
-  )
-}
-EOF
-fi
-
-cat >> PKGBUILD << EOF
-
-build() {
-	cd "\${srcdir}/\${_pkgname}/src"
-	make prefix=\${pkgdir}/usr
-}
-
-package() {
-	install -D -m755 \${srcdir}/\${_pkgname}/src/\${_pkgname2} \${pkgdir}/usr/bin/\${_pkgname2}
-	install -D -m644 \${srcdir}/\${_pkgname}/docs/README.html.en \${pkgdir}/usr/share/doc/\${_pkgname}/README.html
-}
-EOF
+for i in MAINTNAME GPGKEY PKGNAME PKGVER PKGDESC SRCURL LICENSE PKGDEPS OPTDEPS BUILDDEPS _PKGNAME SRCFILE;
+do
+	NEWVAL=${!i}
+	#echo "${i} is ${NEWVAL}"
+	sed -i -re "s@%{2}${i}%{2}@${NEWVAL}@g" PKGBUILD	
+done
 
 # now we need to commit the thing since apparently we can't add empty repos as submodules...?
 mksrcinfo

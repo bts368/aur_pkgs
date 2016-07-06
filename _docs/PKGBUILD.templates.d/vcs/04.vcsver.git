@@ -1,0 +1,18 @@
+pkgver() {
+  cd "${srcdir}/${_pkgname}"
+  # no tags, so number of revisions e.g. r1142.a17a017
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  ## most recent annotated tag e.g. 2.0.r6.ga17a017
+  #git describe --long | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+  ## most recent un-annotated tag e.g. 0.71.r115.gd95ee07
+  #git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+  ## or:
+  ##git describe --long --tags | sed 's/-/.r/;s/-/./'
+  ## project uses tags with prefix. e.g. v...
+  #git describe --long | sed 's/^foo-//;s/\([^-]*-g\)/r\1/;s/-/./g'
+  ## both with fallback, e.g. 0.9.9.r27.g2b039da with tags, else r1581.2b039da
+  #( set -o pipefail
+  #  git describe --long 2>/dev/null | sed 's/\([^-]*-g\)/r\1/;s/-/./g' ||
+  #  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  #)
+}

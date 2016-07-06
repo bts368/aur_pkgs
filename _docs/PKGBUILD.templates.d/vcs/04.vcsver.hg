@@ -1,0 +1,4 @@
+pkgver() {
+  cd "${pkgname}"
+  printf "r%s.%s" "$(hg identify -n)" "$(hg identify -i)"
+}

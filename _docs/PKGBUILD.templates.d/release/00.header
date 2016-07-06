@@ -1,0 +1,2 @@
+# Maintainer: %%MAINTNAME%%
+validpgpkeys=('%%GPGKEY%%')

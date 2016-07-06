@@ -1,0 +1,6 @@
+install=
+changelog=
+noextract=()
+source=("%%SRCURL%%")
+# see https://wiki.archlinux.org/index.php/VCS_package_guidelines#Git_Submodules if you require git submodules
+sha512sums=('SKIP')

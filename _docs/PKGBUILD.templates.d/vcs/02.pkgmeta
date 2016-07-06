@@ -1,0 +1,13 @@
+pkgname=%%PKGNAME%%
+pkgver=0.0000001
+pkgrel=1
+pkgdesc="%%PKGDESC%%"
+arch=('i686' 'x86_64')
+url="%%PKGURL%%"
+license=('%%LICENSE%%')
+depends=('%%PKGDEPS%%')
+optdepends=('%%OPTDEPS%%')
+makedepends=('%%BUILDDEPS%%')
+_pkgname=%%_PKGNAME%%
+provides=("%%_PKGNAME%%")
+conflicts=("%%_PKGNAME%%")
