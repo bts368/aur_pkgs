@@ -133,3 +133,9 @@
 [submodule "augeas-git"]
 	path = augeas-git
 	url = aur@aur.archlinux.org:augeas-git
+[submodule "felony-git"]
+	path = felony-git
+	url = aur@aur.archlinux.org:felony-git
+[submodule "felony"]
+	path = felony
+	url = aur@aur.archlinux.org:felony
