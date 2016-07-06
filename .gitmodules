@@ -139,3 +139,6 @@
 [submodule "felony"]
 	path = felony
 	url = aur@aur.archlinux.org:felony
+[submodule "npm-cross-env"]
+	path = npm-cross-env
+	url = aur@aur.archlinux.org:npm-cross-env
