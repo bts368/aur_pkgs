@@ -20,12 +20,15 @@ do
     case ${opt} in
         "Release/Versioned")
             PKGTYPE="release"
+	    break
             ;;
         "VCS (Git, SVN, Mercurial, etc.)")
             PKGTYPE="vcs"
+	    break
             ;;
         "Quit")
             exit 0
+	    break
             ;;
         *) echo invalid option;;
     esac
@@ -41,18 +44,23 @@ then
 	    case ${opt} in
 	        "Git")
 	            VCSTYPE='git'
+		    break
 	            ;;
 	        "Subversion")
 	            VCSTYPE='svn'
+                    break
 	            ;;
 		"Bazaar")
 		    VCSTYPE='bzr'
+		    break
 	            ;;
 		"(Other)")
 		    VCSTYPE='unknown'
+		    break
 	            ;;
 	        "Quit")
 	            exit 0
+		    break
 	            ;;
 	        *) echo invalid option;;
 	    esac
@@ -98,17 +106,22 @@ fi
 
 # Get other bits of info.
 # PKGDESC
-echo -ne "What is a DESCRIPTION of ${_PKGNAME}? (Do not include the package name- e.g.:\n  Provides a library for mutating teenage turtles\n) "
+echo -ne "What is a DESCRIPTION of ${_PKGNAME}? (Do not include the package name- e.g.:\n  Provides a library for mutating teenage turtles\n): "
 read PKGDESC
 echo
 
 # PKGURL
+echo -n "What is the URL for ${_PKGNAME}'s website? "
+read PKGURL
+echo
+
+# SRCURL
 if [[ "${PKGTYPE}" == 'vcs' ]];
 then
 	echo -ne "What is the CHECKOUT URL for ${_PKGNAME}?\n(Do not include the directory or VCS type prefix as per https://wiki.archlinux.org/index.php/VCS_package_guidelines#VCS_sources - this is added automatically)  e.g.:\n  https://github.com/shinnok/johnny.git\nURL: "
 	read SRCURL
 	echo
-	PKGURL="${_PKGNAME}::${VCSTYPE}+${PKGURL}"
+	SRCURL="${_PKGNAME}::${VCSTYPE}+${SRCURL}"
 	SRCFILE=''
 else
 	echo -n "What is the URL to the source tarball for ${PKGNAME} (version ${PKGVER})? "
@@ -168,7 +181,7 @@ else
 	touch "${SRCFILE}.sig"
 fi
 
-for i in MAINTNAME GPGKEY PKGNAME PKGVER PKGDESC SRCURL LICENSE PKGDEPS OPTDEPS BUILDDEPS _PKGNAME SRCFILE;
+for i in MAINTNAME GPGKEY PKGNAME PKGVER PKGDESC PKGURL SRCURL LICENSE PKGDEPS OPTDEPS BUILDDEPS _PKGNAME SRCFILE;
 do
 	NEWVAL=${!i}
 	#echo "${i} is ${NEWVAL}"
