@@ -127,12 +127,12 @@
 [submodule "wpscrack"]
 	path = wpscrack
 	url = aur@aur.archlinux.org:wpscrack
-[submodule "zandronum-dev"]
-	path = zandronum-dev
-	url = aur@aur.archlinux.org:zandronum-dev
 [submodule "augeas-git"]
 	path = augeas-git
 	url = aur@aur.archlinux.org:augeas-git
 [submodule "ecdsatool-git"]
 	path = ecdsatool-git
 	url = aur@aur.archlinux.org:ecdsatool-git
+[submodule "zandronum-hg"]
+	path = zandronum-hg
+	url = aur@aur.archlinux.org:zandronum-hg

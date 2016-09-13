@@ -50,6 +50,10 @@ then
 	            VCSTYPE='svn'
                     break
 	            ;;
+		"Mercurial")
+		    VCSTYPE='hg'
+		    break
+		    ;;
 		"Bazaar")
 		    VCSTYPE='bzr'
 		    break

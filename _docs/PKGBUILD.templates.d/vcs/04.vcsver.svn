@@ -1,5 +1,5 @@
 pkgver() {
-  cd "${pkgname}"
+  cd "${_pkgname}"
   local ver="$(svnversion)"
   printf "r%s" "${ver//[[:alpha:]]}"
 }
