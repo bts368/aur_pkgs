@@ -136,3 +136,6 @@
 [submodule "zandronum-hg"]
 	path = zandronum-hg
 	url = aur@aur.archlinux.org:zandronum-hg
+[submodule "phrasendrescher"]
+	path = phrasendrescher
+	url = aur@aur.archlinux.org:phrasendrescher
