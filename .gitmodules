@@ -139,3 +139,6 @@
 [submodule "phrasendrescher"]
 	path = phrasendrescher
 	url = aur@aur.archlinux.org:phrasendrescher
+[submodule "stuntman-git"]
+	path = stuntman-git
+	url = aur@aur.archlinux.org:stuntman-git
