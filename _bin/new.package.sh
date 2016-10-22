@@ -78,7 +78,7 @@ echo
 
 # check PKGNAME
 set +e  # disable bail-on-error because we want a non-zero if a package name is not right, etc.
-echo "${PKGNAME}" | egrep -Eq '^([a-z0-9\_])+$'
+echo "${PKGNAME}" | egrep -Eq '^([a-z0-9\_\-])+$'
 if [[ "${?}" -ne '0' ]];
 then
 	echo "ERROR: That does not seem to be a valid package name!"
