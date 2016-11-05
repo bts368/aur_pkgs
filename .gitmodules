@@ -142,3 +142,9 @@
 [submodule "stuntman-git"]
 	path = stuntman-git
 	url = aur@aur.archlinux.org:stuntman-git
+[submodule "freeswitch-demo-config"]
+	path = freeswitch-demo-config
+	url = aur@aur.archlinux.org:freeswitch-demo-config
+[submodule "nquakesv"]
+	path = nquakesv
+	url = aur@aur.archlinux.org:nquakesv
