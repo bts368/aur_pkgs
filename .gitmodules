@@ -37,9 +37,6 @@
 [submodule "freeswitch-git"]
 	path = freeswitch-git
 	url = aur@aur.archlinux.org:freeswitch-git
-[submodule "freeswitch-lite"]
-	path = freeswitch-lite
-	url = aur@aur.archlinux.org:freeswitch-lite
 [submodule "iozone"]
 	path = iozone
 	url = aur@aur.archlinux.org:iozone
@@ -142,9 +139,6 @@
 [submodule "stuntman-git"]
 	path = stuntman-git
 	url = aur@aur.archlinux.org:stuntman-git
-[submodule "freeswitch-demo-config"]
-	path = freeswitch-demo-config
-	url = aur@aur.archlinux.org:freeswitch-demo-config
 [submodule "nquakesv"]
 	path = nquakesv
 	url = aur@aur.archlinux.org:nquakesv
