@@ -145,6 +145,3 @@
 [submodule "python-zconfig"]
 	path = python-zconfig
 	url = aur@aur.archlinux.org:python-zconfig
-[submodule "python-menu"]
-	path = python-menu
-	url = aur@aur.archlinux.org:python-menu
