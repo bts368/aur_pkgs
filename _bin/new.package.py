@@ -2,9 +2,13 @@
 
 import re
 import os
+import shutil
 import subprocess
-import pygit2
-import menu3
+import git # python-gitpython in AUR
+import menu3 # python-menu3 in AUR
+from tempfile import gettempdir
+
+import pprint
 
 ## SETTINGS ##
 gpgkey = '748231EBCBD808A14F5E85D28C004C2F93481F6B'  # https://wiki.archlinux.org/index.php/PKGBUILD#validpgpkeys
@@ -79,7 +83,20 @@ def gui_init():
     pkg['conflicts'] = list(map(str, conflicts_raw.split()))
     return(pkg)
 
-import pprint
+## MAKE SURE SOME PREREQS HAPPEN ##
+def sanity_checks(pkg):
+    try:
+        os.makedirs(pkgbuild_dir)
+    except OSError as exception:
+        if exception.errno != errno.EEXIST:
+            raise
+
+def aur_create(pkg):
+    tmpcheckout = os.path.join(gettempdir(), '.aur_pkgs.{}'.format(pkg['name']))
+    pygit2.clone_repository('aur@aur.archlinux.org:' + pkg['name'], tmpcheckout, bare=False, repository=None, remote=None, checkout_branch=None, callbacks=None)
+    shutil.copy2(aur_pkgs_dir + "/_docs/PKGBUILD.templates.d/gitignore", tmpcheckout + "/.gitignore")
+
+
 pprint.pprint(gui_init())
 
 
