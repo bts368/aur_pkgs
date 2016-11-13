@@ -16,3 +16,5 @@ pkg/
 *.rar
 *.deb
 *.pkg.tar.xz.sig
+__pycache__/
+*.pyc

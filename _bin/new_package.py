@@ -5,12 +5,12 @@ import os
 import shutil
 import subprocess
 import hashlib
-import urllib2
 import datetime
 import git  # python-gitpython in AUR
 import menu3  # python-menu3 in AUR
 import jinja2  # python-jinja in community
 from tempfile import gettempdir
+from urllib.request import urlopen
 
 import pprint
 
@@ -71,7 +71,7 @@ def gui_init():
         # And here's where we download the source file for hashing
         pkg['src_dl'] = gettempdir() + "/" + pkg['srcfile']
         print("Please wait while we download {0} to {1}...\n".format(pkg['srcfile'], pkg['src_dl']))
-        datastream = urllib2.urlopen(pkg['srcurl'])
+        datastream = urlopen(pkg['srcurl'])
         data_in = datastream.read()
         with open(pkg['src_dl'], "wb") as data_dl:
             data_dl.write(data_in)
@@ -81,18 +81,27 @@ def gui_init():
     pkg['desc'] = input("\nWhat is a short description of {0}?\n".format(pkg['name']))
     pkg['site'] = input("\nWhat is {0}'s website?\n".format(pkg['name']))
     pkg['license'] = []
-    license_raw = input("\nWhat is {0}'s license(s)? (See https://wiki.archlinux.org/index.php/PKGBUILD#license)\nIf you have more than one, separate them by spaces.\n".format(pkg['name']).upper())
+    license_raw = input("\nWhat is {0}'s license(s)? (See https://wiki.archlinux.org/index.php/PKGBUILD#license)\n" +
+                        "If you have more than one, separate them by spaces.\n".format(pkg['name']).upper())
     pkg['license'] = list(map(str, license_raw.split()))
     pkg['deps'] = []
-    deps_raw = input("\nWhat does {0} depend on for runtime? if no packages, just hit enter.\nMake sure they correspond to Arch/AUR package names.\nIf you have more than one, separate them by spaces.\n".format(pkg['name']))
+    deps_raw = input("\nWhat does {0} depend on for runtime? if no packages, just hit enter.\n" +
+                    "Make sure they correspond to Arch/AUR package names.\n" +
+                    "If you have more than one, separate them by spaces.\n".format(pkg['name']))
     if deps_raw:
         pkg['deps'] = list(map(str, deps_raw.split()))
     pkg['optdeps'] = []
-    optdeps_raw = input("\nWhat does {0} optionally depend on (runtime)? if no packages, just hit enter.\nMake sure they correspond to Arch/AUR package names.\nIf you have more than one, separate them by COMMAS.\nThey should follow this format:\npkgname: some reason why it should be installed\n".format(pkg['name']))
+    optdeps_raw = input("\nWhat does {0} optionally depend on (runtime)? if no packages, just hit enter.\n" +
+                        "Make sure they correspond to Arch/AUR package names.\n" +
+                        "If you have more than one, separate them by COMMAS.\n" + 
+                        "They should follow this format:\n" +
+                        "pkgname: some reason why it should be installed\n".format(pkg['name']))
     if optdeps_raw:
         pkg['optdeps'] = list(map(str, optdeps_raw.split(',')))
     pkg['makedeps'] = []
-    makedeps_raw = input("\nWhat dependencies are required for building/making {0}? If no packages, just hit enter.\nMake sure they correspond to Arch/AUR package names.\nIf you have more than one, separate them by spaces.\n".format(pkg['name']))
+    makedeps_raw = input("\nWhat dependencies are required for building/making {0}? If no packages, just hit enter.\n" +
+                        "Make sure they correspond to Arch/AUR package names.\n" +
+                        "If you have more than one, separate them by spaces.\n".format(pkg['name']))
     if makdepds_raw:
         pkg['makedeps'] = list(map(str, makedeps_raw.split()))
     if pkg['type'] == 'vcs':
@@ -100,7 +109,9 @@ def gui_init():
     else:
         pkg['provides'] = [pkg['name']]
     pkg['provides'] = []
-    provides_raw = input("\nWhat package names, if any besides itself, does {0} provide?\n(If {0} is a VCS package, do NOT include the non-VCS package name- that's added by default!)\nIf you have more than one, separate them by spaces.\n".format(pkg['name']))
+    provides_raw = input("\nWhat package names, if any besides itself, does {0} provide?\n" +
+                        "(If {0} is a VCS package, do NOT include the non-VCS package name- that's added by default!)\n" +
+                        "If you have more than one, separate them by spaces.\n".format(pkg['name']))
     if provides_raw:
         provides_list = list(map(str, provides_raw.split()))
         pkg['provides'] = pkg['provides'] + provides_list
@@ -108,7 +119,9 @@ def gui_init():
         pkg['conflicts'] = [pkg['name'].split('-')[0]]
     else:
         pkg['conflicts'] = [pkg['name']]
-    conflicts_raw = input("\nWhat package names, if any, does {0} conflict with?\n(If {0} is a VCS package, do NOT include the non-VCS package name- that's added by default!)\nIf you have more than one, separate them by spaces.\n".format(pkg['name']))
+    conflicts_raw = input("\nWhat package names, if any, does {0} conflict with?\n" +
+                        "(If {0} is a VCS package, do NOT include the non-VCS package name- that's added by default!)\n" +
+                        "If you have more than one, separate them by spaces.\n".format(pkg['name']))
     if conflicts_raw:
         conflicts_list = list(map(str, conflicts_raw.split()))
         pkg['conflicts'] = pkg['conflicts'] + conflicts_list
@@ -138,7 +151,10 @@ def aur_create(pkg):
     pkgbuild_list = tpl_fsloader2.list_templates()
     pkgbuild_list[:] = [pkg['type'] + '/' + s for s in pkgbuild_list]
     tpl_env = jinja2.Environment(loader = tpl_fsloader)
-    pkgbuild_out = tpl_env.get_template(pkg['type'] + '.all.j2').render(pkg = pkg, maintname = maintname, gpgkey = gpgkey, pkgbuild_list = pkgbuild_list)
+    pkgbuild_out = tpl_env.get_template(pkg['type'] + '.all.j2').render(pkg = pkg,
+                                                                        maintname = maintname,
+                                                                        gpgkey = gpgkey,
+                                                                        pkgbuild_list = pkgbuild_list)
     with open(repo_dir + "/PKGBUILD", "wb") as pkgbuild_file:
         pkgbuild_file.write(pkgbuild_out)
     # Move the source file
@@ -167,6 +183,6 @@ def aur_create(pkg):
 def aur_submodule(pkg):
     print()
 
-pprint.pprint(gui_init())
+#pprint.pprint(gui_init())
 
 #aur_create(gui_init())
