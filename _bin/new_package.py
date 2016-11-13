@@ -47,7 +47,10 @@ def gui_init():
                     "Bazaar (bzr)"]
         vcs_menu = m.menu("What type of VCS system?", vcs_options, "VCS type ('q' to quit):")
         pkg['name'] = input("\nWhat is the name of your package? (Exclude the '-git' etc. suffix, that will be added automatically later on)\n").lower()
-        srcurl = input("\nWhat is the checkout URL for {0}?\n(Do not include the directory or VCS type prefix as per\nhttps://wiki.archlinux.org/index.php/VCS_package_guidelines#VCS_sources ...\nit will be added automatically)\n".format(pkg['name']))
+        srcurl = input("\nWhat is the checkout URL for {0}?\n" +
+                        "(Do not include the directory or VCS type prefix as per\n" +
+                        "https://wiki.archlinux.org/index.php/VCS_package_guidelines#VCS_sources ...\n" +
+                        "it will be added automatically)\n".format(pkg['name']))
         pkg['vcstype'] = ["git",
                 "svn",
                 "hg",
@@ -181,6 +184,19 @@ def aur_create(pkg):
 
 ## ADD THE SUBMODULE TO THE MAIN AUR TREE ##
 def aur_submodule(pkg):
+    aur_pkgs_repo = git.Repo(aur_pkgs_dir)
+    aur_pkgs_repo.create_submodule(pkg['name'],aur_pkgs_dir + '/' + pkg['name'],url='aur@aur.archlinux.org:' + pkg['name'])
+    aur_pkgs_repo.index.commit("adding {0}".format(pkg['name']))
+    # Comment me out if you don't have access to upstream:
+    aur_pkgs_repo.push()
+    # And don't forget to add the hook to make life easier for us in the future.
+    # WARNING: HERE BE POSSIBLE RACE CONDITIONS
+    mod_gitdir = aur_pkgs_repo.submodules[-1].module().git_dir
+    if not aur_pkgs_repo.submodules[-1].module().git_dir.endswith(pkg['name']):
+        exit('SOMETHING FUCKED UP BADLY. Do not run this thing in parallel.')
+    else:
+        pass
+    shutil.copy2(aur_pkgs_dir + '/_docs/PKGBUILD.templates.d.python/pre-commit.hook.sh', mod_gitdir + '/hooks/pre-commit', follow_symlinks = True)
     print()
 
 #pprint.pprint(gui_init())
