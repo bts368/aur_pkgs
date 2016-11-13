@@ -1,0 +1,13 @@
+pkgname={{ pkg['name'] }}
+pkgver=0.0001
+pkgrel=1
+pkgdesc="{{ pkg['desc'] }}"
+arch=( 'i686' 'x86_64' )
+url="{{ pkg['site'] }}"
+license=({% for license in pkg['license'] %}'{{ license }}' {% endfor %}){% if pkg['deps'] is defined and pkg['deps']|length > 0 %}
+depends=( {% for dep in pkg['deps'] %}'{{ dep }}' {% endfor %}){% endif %}{% if pkg['optdeps'] is defined and pkg['optdeps']|length > 0 %}
+optdepends=( {% for dep in pkg['optdeps'] %}'{{ dep }}' {% endfor %}){% endif %}{% if pkg['makedeps'] is defined and pkg['makedeps']|length > 0 %}
+makedepends=( {% for dep in pkg['makedeps'] %}'{{ dep }}' {% endfor %}){% endif %}
+_pkgname={{ pkg['name']|replace("-" + pkg['vcstype'],'') }}{% if pkg['provides'] is defined and pkg['provides']|length > 0 %}
+provides=( {% for pkg in pkg['provides'] %}'{{ pkg }}' {% endfor %}){% endif %}{% if pkg['conflicts'] is defined and pkg['conflicts']|length > 0 %}
+conflicts=( {% for pkg in pkg['conflicts'] %}'pkg'{% endfor %}){% endif %}
