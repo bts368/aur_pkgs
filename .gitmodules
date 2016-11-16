@@ -154,3 +154,6 @@
 [submodule "python-snakeoil"]
 	url = aur@aur.archlinux.org:python-snakeoil
 	path = python-snakeoil
+[submodule "python-pychroot"]
+	url = aur@aur.archlinux.org:python-pychroot
+	path = python-pychroot
