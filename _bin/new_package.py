@@ -6,6 +6,7 @@ import shutil
 import subprocess
 import hashlib
 import datetime
+import gnupg
 import git  # python-gitpython in AUR
 import menu3  # python-menu3 in AUR
 import jinja2  # python-jinja in community
@@ -19,6 +20,8 @@ gpgkey = ['748231EBCBD808A14F5E85D28C004C2F93481F6B']  # https://wiki.archlinux.
 maintname = 'brent s. <bts[at]square-r00t[dot]net>'  # your name and email address, feel free to obfuscate though
 pkgbuild_dir = '/opt/dev/arch'  # what dir do the pkgbuilds/AUR checkouts live?
 aur_pkgs_dir = pkgbuild_dir  # should be the dir where the aur_pkgs repo checkout lives. it's recommended you keep this the same as pkgbuild_dir
+git_name = 'brent s.'  # the name to use in AUR git commits
+git_email = 'bts@square-r00t.net'  # the email to use in AUR git commits
 
 ## BUILD THE GUI ##
 def gui_init():
@@ -72,7 +75,7 @@ def gui_init():
         pkg['srcfile'] = re.sub('^\s*(https?|ftp).*/(.*)\s*$', '\\2', pkg['srcurl'], re.IGNORECASE)
         pkg['type'] = 'release'
         # And here's where we download the source file for hashing
-        pkg['src_dl'] = gettempdir() + "/" + pkg['srcfile']
+        pkg['src_dl'] = "{0}/.aur_pkgs/{1}".format(gettempdir(), pkg['srcfile'])
         print("Please wait while we download {0} to {1}...\n".format(pkg['srcfile'], pkg['src_dl']))
         datastream = urlopen(pkg['srcurl'])
         data_in = datastream.read()
@@ -84,37 +87,37 @@ def gui_init():
     pkg['desc'] = input("\nWhat is a short description of {0}?\n".format(pkg['name']))
     pkg['site'] = input("\nWhat is {0}'s website?\n".format(pkg['name']))
     pkg['license'] = []
-    license_raw = input("\nWhat is {0}'s license(s)? (See https://wiki.archlinux.org/index.php/PKGBUILD#license)\n" +
-                        "If you have more than one, separate them by spaces.\n".format(pkg['name']).upper())
+    license_raw = input(("\nWhat is {0}'s license(s)? (See https://wiki.archlinux.org/index.php/PKGBUILD#license)\n" +
+                        "If you have more than one, separate them by spaces.\n").format(pkg['name'])).upper()
     pkg['license'] = list(map(str, license_raw.split()))
     pkg['deps'] = []
-    deps_raw = input("\nWhat does {0} depend on for runtime? if no packages, just hit enter.\n" +
+    deps_raw = input(("\nWhat does {0} depend on for runtime? if no packages, just hit enter.\n" +
                     "Make sure they correspond to Arch/AUR package names.\n" +
-                    "If you have more than one, separate them by spaces.\n".format(pkg['name']))
+                    "If you have more than one, separate them by spaces.\n").format(pkg['name']))
     if deps_raw:
         pkg['deps'] = list(map(str, deps_raw.split()))
     pkg['optdeps'] = []
-    optdeps_raw = input("\nWhat does {0} optionally depend on (runtime)? if no packages, just hit enter.\n" +
+    optdeps_raw = input(("\nWhat does {0} optionally depend on (runtime)? if no packages, just hit enter.\n" +
                         "Make sure they correspond to Arch/AUR package names.\n" +
                         "If you have more than one, separate them by COMMAS.\n" + 
                         "They should follow this format:\n" +
-                        "pkgname: some reason why it should be installed\n".format(pkg['name']))
+                        "pkgname: some reason why it should be installed\n").format(pkg['name']))
     if optdeps_raw:
         pkg['optdeps'] = list(map(str, optdeps_raw.split(',')))
     pkg['makedeps'] = []
-    makedeps_raw = input("\nWhat dependencies are required for building/making {0}? If no packages, just hit enter.\n" +
+    makedeps_raw = input(("\nWhat dependencies are required for building/making {0}? If no packages, just hit enter.\n" +
                         "Make sure they correspond to Arch/AUR package names.\n" +
-                        "If you have more than one, separate them by spaces.\n".format(pkg['name']))
-    if makdepds_raw:
+                        "If you have more than one, separate them by spaces.\n").format(pkg['name']))
+    if makedeps_raw:
         pkg['makedeps'] = list(map(str, makedeps_raw.split()))
     if pkg['type'] == 'vcs':
         pkg['provides'] = [pkg['name'].split('-')[0]]
     else:
         pkg['provides'] = [pkg['name']]
     pkg['provides'] = []
-    provides_raw = input("\nWhat package names, if any besides itself, does {0} provide?\n" +
+    provides_raw = input(("\nWhat package names, if any besides itself, does {0} provide?\n" +
                         "(If {0} is a VCS package, do NOT include the non-VCS package name- that's added by default!)\n" +
-                        "If you have more than one, separate them by spaces.\n".format(pkg['name']))
+                        "If you have more than one, separate them by spaces.\n").format(pkg['name']))
     if provides_raw:
         provides_list = list(map(str, provides_raw.split()))
         pkg['provides'] = pkg['provides'] + provides_list
@@ -122,30 +125,31 @@ def gui_init():
         pkg['conflicts'] = [pkg['name'].split('-')[0]]
     else:
         pkg['conflicts'] = [pkg['name']]
-    conflicts_raw = input("\nWhat package names, if any, does {0} conflict with?\n" +
+    conflicts_raw = input(("\nWhat package names, if any, does {0} conflict with?\n" +
                         "(If {0} is a VCS package, do NOT include the non-VCS package name- that's added by default!)\n" +
-                        "If you have more than one, separate them by spaces.\n".format(pkg['name']))
+                        "If you have more than one, separate them by spaces.\n").format(pkg['name']))
     if conflicts_raw:
         conflicts_list = list(map(str, conflicts_raw.split()))
         pkg['conflicts'] = pkg['conflicts'] + conflicts_list
     return(pkg)
 
 ## MAKE SURE SOME PREREQS HAPPEN ##
-def sanity_checks(pkg):
-    try:
-        os.makedirs(pkgbuild_dir)
-    except OSError as exception:
-        if exception.errno != errno.EEXIST:
-            raise
+def sanity_checks():
+    os.makedirs(pkgbuild_dir, exist_ok = True)
 
 ## REGISTER IN THE AUR AND MAKE FIRST COMMIT ##
 def aur_create(pkg):
     # git clone from AUR to create repository, add .gitignore
     tmpcheckout = os.path.join(gettempdir(), '.aur_pkgs')
     repo_dir = tmpcheckout + '/' + pkg['name']
-    aur_repo = git.Repo.clone_from('aur@aur.archlinux.org:' + pkg['name'], git.osp.join(tmpcheckout, pkg['name']), branch='master')
-    shutil.copy2(aur_pkgs_dir + "/_docs/PKGBUILD.templates.d/gitignore", tmpcheckout + "/.gitignore")
-    aur_repo.index.add('.gitignore')
+    if os.path.exists(repo_dir):
+        shutil.rmtree(repo_dir)
+    git_repo_dir = git.osp.join(tmpcheckout, pkg['name'])
+    # oops. originally had branch='master', which causes it to die since we're cloneing an empty repo
+    aur_repo = git.Repo.clone_from('aur@aur.archlinux.org:' + pkg['name'], git_repo_dir)
+    repo_dir = aur_repo.working_tree_dir
+    shutil.copy2(aur_pkgs_dir + "/_docs/PKGBUILD.templates.d/gitignore", repo_dir + "/.gitignore")
+    aur_repo.index.add(['.gitignore'])
     # Create the initial PKGBUILD
     tpl_dir = aur_pkgs_dir + '/_docs/PKGBUILD.templates.d.python'
     tpl_meta = aur_pkgs_dir + '/_docs/PKGBUILD.templates.d.python' + '/' + pkg['type'] + '.all'
@@ -158,29 +162,32 @@ def aur_create(pkg):
                                                                         maintname = maintname,
                                                                         gpgkey = gpgkey,
                                                                         pkgbuild_list = pkgbuild_list)
-    with open(repo_dir + "/PKGBUILD", "wb") as pkgbuild_file:
+    with open(repo_dir + "/PKGBUILD", "w+") as pkgbuild_file:
         pkgbuild_file.write(pkgbuild_out)
     # Move the source file
     if pkg['srcfile']:
-        os.rename(pkg['src_dl'], repodir + '/' + pkg['srcfile'])
-        # And sign with GPG
+        # sign with GPG
         gpg = gnupg.GPG()
-        datastream = open(pkg['dl_src'], 'rb')
-        gpg.sign_file(datastream, keyid = gpgkey[0], detach = True, clearsign = False, output = repodir + '/' + pkg['srcfile'] + '.sig')
+        datastream = open(pkg['src_dl'], 'rb')
+        print("If you see an error about 'KEY_CONSIDERED', you most likely can ignore it.")
+        gpg.sign_file(datastream, keyid = gpgkey[0], detach = True, clearsign = False, output = repo_dir + '/' + pkg['srcfile'] + '.sig')
         datastream.close()
-        aur.repo.indes.add(pkg['srcfile'] + '.sig')
-    aur.repo.index.add('PKGBUILD')
+        aur_repo.index.add([pkg['srcfile'] + '.sig'])
+    aur_repo.index.add(['PKGBUILD'])
     # TODO: SRCINFO!
     now = datetime.datetime.utcnow().strftime("%a %b %d %H:%M:%S UTC %Y")
     srcinfo_out = tpl_env.get_template('srcinfo.j2').render(pkg = pkg, now = now )
-    with open(repo_dir + "/.SRCINFO", "wb") as srcinfo_file:
+    with open(repo_dir + "/.SRCINFO", "w+") as srcinfo_file:
         srcinfo_file.write(srcinfo_out)
+    aur_repo.index.add(['.SRCINFO'])
     # commit to git
     aur_repo.index.commit("initial commit; setting up .gitignores and skeleton PKGBUILD")
     # and push...
     aur_repo.push()
-    # and delete the repo
+    # and delete the repo and source file
     shutil.rmtree(repo_dir)
+    if pkg['srcfile']:
+        os.remove(pkg['src_dl'])
 
 ## ADD THE SUBMODULE TO THE MAIN AUR TREE ##
 def aur_submodule(pkg):
@@ -202,3 +209,9 @@ def aur_submodule(pkg):
 #pprint.pprint(gui_init())
 
 #aur_create(gui_init())
+
+if __name__ ==  "__main__":
+    pkg = gui_init()
+    sanity_checks()
+    aur_create(pkg)
+    aur_submodule(pkg)
