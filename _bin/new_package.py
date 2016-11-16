@@ -215,4 +215,4 @@ if __name__ ==  "__main__":
     sanity_checks()
     aur_create(pkg)
     aur_submodule(pkg)
-    print("Done! Successfully added {0} to the AUR and your local AUR meta-repository.".format(pkg['name'])
+    print("Done! Successfully added {0} to the AUR and your local AUR meta-repository.".format(pkg['name']))
