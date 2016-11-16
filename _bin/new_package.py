@@ -183,7 +183,7 @@ def aur_create(pkg):
     # commit to git
     aur_repo.index.commit("initial commit; setting up .gitignores and skeleton PKGBUILD")
     # and push...
-    aur_repo.push()
+    aur_repo.remotes.origin.push()
     # and delete the repo and source file
     shutil.rmtree(repo_dir)
     if pkg['srcfile']:
@@ -192,10 +192,10 @@ def aur_create(pkg):
 ## ADD THE SUBMODULE TO THE MAIN AUR TREE ##
 def aur_submodule(pkg):
     aur_pkgs_repo = git.Repo(aur_pkgs_dir)
-    aur_pkgs_repo.create_submodule(pkg['name'],aur_pkgs_dir + '/' + pkg['name'],url='aur@aur.archlinux.org:' + pkg['name'])
+    aur_pkgs_repo.create_submodule(pkg['name'],aur_pkgs_dir + '/' + pkg['name'], url='aur@aur.archlinux.org:' + pkg['name'])
     aur_pkgs_repo.index.commit("adding {0}".format(pkg['name']))
     # Comment me out if you don't have access to upstream:
-    aur_pkgs_repo.push()
+    aur_pkgs_repo.remotes.origin.push()
     # And don't forget to add the hook to make life easier for us in the future.
     # WARNING: HERE BE POSSIBLE RACE CONDITIONS
     mod_gitdir = aur_pkgs_repo.submodules[-1].module().git_dir
