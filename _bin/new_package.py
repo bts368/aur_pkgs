@@ -192,7 +192,7 @@ def aur_create(pkg):
 ## ADD THE SUBMODULE TO THE MAIN AUR TREE ##
 def aur_submodule(pkg):
     aur_pkgs_repo = git.Repo(aur_pkgs_dir)
-    aur_pkgs_repo.create_submodule(pkg['name'],aur_pkgs_dir + '/' + pkg['name'], url='aur@aur.archlinux.org:' + pkg['name'])
+    aur_pkgs_repo.create_submodule(pkg['name'], aur_pkgs_dir + '/' + pkg['name'], url='aur@aur.archlinux.org:' + pkg['name'])
     aur_pkgs_repo.index.commit("adding {0}".format(pkg['name']))
     # Comment me out if you don't have access to upstream:
     aur_pkgs_repo.remotes.origin.push()
@@ -215,3 +215,4 @@ if __name__ ==  "__main__":
     sanity_checks()
     aur_create(pkg)
     aur_submodule(pkg)
+    print("Done! Successfully added {0} to the AUR and your local AUR meta-repository.".format(pkg['name'])

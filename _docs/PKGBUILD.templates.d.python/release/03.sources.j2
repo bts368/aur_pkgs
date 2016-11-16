@@ -2,6 +2,6 @@ install=
 changelog=
 noextract=()
 source=("{{ pkg['srcurl'] }}"
-        "{{ pkg['srcfile'].sig }}")
+        "{{ pkg['srcfile'] }}.sig")
 sha512sums=('{{ pkg['srchash'] }}'
             'SKIP')

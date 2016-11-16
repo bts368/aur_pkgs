@@ -6,17 +6,14 @@ pkgbase = {{ pkg['name'] }}
 	pkgrel = 1
 	url = {{ pkg['site'] }}
 	arch = i686
-	arch = x86_64
-{% for license in pkg['license'] %}
-	license = {{ license }}
-{% endfor %}{% if pkg['deps'] is defined and pkg['deps']|length > 0 %}{% for dep in pkg['deps'] %}
+	arch = x86_64{% for license in pkg['license'] %}
+	license = {{ license }}{% endfor %}{% if pkg['deps'] is defined and pkg['deps']|length > 0 %}{% for dep in pkg['deps'] %}
 	depends = {{ dep }}{% endfor %}{% endif %}{% if pkg['optdeps'] is defined and pkg['optdeps']|length > 0 %}{% for dep in pkg['optdeps'] %}
 	optdepends = {{ dep }}{% endfor %}{% endif %}
 	source = {{ pkg['srcurl'] }}{% if pkg['srcfile'] is defined %}
-	source = {{ pkg['srcfile'] }}{% endif %}
+	source = {{ pkg['srcfile'] }}.sig{% endif %}
 	sha512sums = {{ pkg['srchash'] }}{% if pkg['srcfile'] is defined%}
 	sha512sums = SKIP{% endif %}
 
 pkgname = {{ pkg['name'] }}
-
 
