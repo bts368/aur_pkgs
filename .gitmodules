@@ -157,3 +157,6 @@
 [submodule "python-pychroot"]
 	url = aur@aur.archlinux.org:python-pychroot
 	path = python-pychroot
+[submodule "python-validators"]
+	url = aur@aur.archlinux.org:python-validators
+	path = python-validators
