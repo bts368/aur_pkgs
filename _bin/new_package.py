@@ -75,6 +75,7 @@ def gui_init():
         pkg['srcfile'] = re.sub('^\s*(https?|ftp).*/(.*)\s*$', '\\2', pkg['srcurl'], re.IGNORECASE)
         pkg['type'] = 'release'
         # And here's where we download the source file for hashing
+        os.makedirs(('{0}/.aur_pkgs'.format(gettempdir())), exist_ok = True)
         pkg['src_dl'] = "{0}/.aur_pkgs/{1}".format(gettempdir(), pkg['srcfile'])
         print("Please wait while we download {0} to {1}...\n".format(pkg['srcfile'], pkg['src_dl']))
         datastream = urlopen(pkg['srcurl'])
