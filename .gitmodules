@@ -163,3 +163,6 @@
 [submodule "bdisk-git"]
 	url = aur@aur.archlinux.org:bdisk-git
 	path = bdisk-git
+[submodule "bdisk"]
+	url = aur@aur.archlinux.org:bdisk
+	path = bdisk
