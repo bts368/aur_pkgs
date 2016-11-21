@@ -160,3 +160,4 @@
 [submodule "python-validators"]
 	url = aur@aur.archlinux.org:python-validators
 	path = python-validators
+	url = aur@aur.archlinux.org:bdisk-git
