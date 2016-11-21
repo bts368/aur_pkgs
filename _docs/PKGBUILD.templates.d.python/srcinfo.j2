@@ -10,7 +10,7 @@ pkgbase = {{ pkg['name'] }}
 	license = {{ license }}{% endfor %}{% if pkg['deps'] is defined and pkg['deps']|length > 0 %}{% for dep in pkg['deps'] %}
 	depends = {{ dep }}{% endfor %}{% endif %}{% if pkg['optdeps'] is defined and pkg['optdeps']|length > 0 %}{% for dep in pkg['optdeps'] %}
 	optdepends = {{ dep }}{% endfor %}{% endif %}
-	source = {{ pkg['srcurl'] }}{% if pkg['srcfile'] is defined %}
+	source = {{ pkg['srcurl'] }}{% if pkg['srcfile'] is defined and pkg['srcfile'] != false %}
 	source = {{ pkg['srcfile'] }}.sig{% endif %}
 	sha512sums = {{ pkg['srchash'] }}{% if pkg['srcfile'] is defined%}
 	sha512sums = SKIP{% endif %}

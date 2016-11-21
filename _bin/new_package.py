@@ -50,15 +50,16 @@ def gui_init():
                     "Bazaar (bzr)"]
         vcs_menu = m.menu("What type of VCS system?", vcs_options, "VCS type ('q' to quit):")
         pkg['name'] = input("\nWhat is the name of your package? (Exclude the '-git' etc. suffix, that will be added automatically later on)\n").lower()
-        srcurl = input("\nWhat is the checkout URL for {0}?\n" +
+        srcurl = input(("\nWhat is the checkout URL for {0}?\n" +
                         "(Do not include the directory or VCS type prefix as per\n" +
                         "https://wiki.archlinux.org/index.php/VCS_package_guidelines#VCS_sources ...\n" +
-                        "it will be added automatically)\n".format(pkg['name']))
+                        "it will be added automatically)\n").format(pkg['name']))
         pkg['vcstype'] = ["git",
                 "svn",
                 "hg",
                 "bzr"]
-        pkg['srcurl'] = pkg['name'] + "::" + pkg['vcstype'][vcs_menu-1] + srcurl
+        pkg['vcstype'] = pkg['vcstype'][vcs_menu-1]
+        pkg['srcurl'] = pkg['name'] + "::" + pkg['vcstype'] + '+' + srcurl
         pkg['name'] = pkg['name'] + "-" + pkg['vcstype']
         pkg['type'] = 'vcs'
         pkg['srcfile'] = False
@@ -186,7 +187,7 @@ def aur_create(pkg):
     # and push...
     aur_repo.remotes.origin.push()
     # and delete the repo and source file
-    shutil.rmtree(repo_dir)
+    #shutil.rmtree(repo_dir)
     if pkg['srcfile']:
         os.remove(pkg['src_dl'])
 
