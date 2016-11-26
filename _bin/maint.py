@@ -30,6 +30,7 @@ def gui_init():
 
     base_options = ["Add a new package to the AUR...",
                     "Sign a package's sources",
+                    "Remove a submodule",
                     "Update/initialize submodules from your AUR account"]
     base_menu = m.menu("How might I assist you today?", base_options, "Select an operation ('q' to quit):")
     pkg = {}
@@ -39,6 +40,7 @@ def gui_init():
         add_menu = m.menu("What type of package is this?", add_options, "Package type ('q' to quit):")
     elif base_menu == 2:
         pkg['oper'] = 'sign'
+        pkg['name'] = input("What package would you like to sign sources for?\n").lower()
     elif base_menu == 3:
         pkg['oper'] = 'submodule'
 
