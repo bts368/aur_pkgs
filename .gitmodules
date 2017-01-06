@@ -148,9 +148,6 @@
 [submodule "python-menu3"]
 	path = python-menu3
 	url = aur@aur.archlinux.org:python-menu3
-[submodule "python-gitpython"]
-	path = python-gitpython
-	url = aur@aur.archlinux.org:python-gitpython
 [submodule "python-snakeoil"]
 	url = aur@aur.archlinux.org:python-snakeoil
 	path = python-snakeoil
