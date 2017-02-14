@@ -10,3 +10,5 @@ in README, need to mention HOW to use scripts- and how to sign packages, how to 
 
 
 python rewrite of new packages is almost done. the biggest part is done, anyways- still need the other menu options fleshed out and to bring it all together under a __main__
+
+python packages: see https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=python-gitdb2 for example
