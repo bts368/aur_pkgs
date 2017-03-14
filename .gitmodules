@@ -166,3 +166,6 @@
 [submodule "python-gitpython"]
 	path = python-gitpython
 	url = aur@aur.archlinux.org:python-gitpython
+[submodule "ietf-cli"]
+	url = aur@aur.archlinux.org:ietf-cli
+	path = ietf-cli
