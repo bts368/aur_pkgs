@@ -169,3 +169,6 @@
 [submodule "ietf-cli"]
 	url = aur@aur.archlinux.org:ietf-cli
 	path = ietf-cli
+[submodule "q2pro"]
+	url = aur@aur.archlinux.org:q2pro
+	path = q2pro
