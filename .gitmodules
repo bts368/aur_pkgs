@@ -172,3 +172,6 @@
 [submodule "q2pro"]
 	url = aur@aur.archlinux.org:q2pro
 	path = q2pro
+[submodule "q2pro-git"]
+	url = aur@aur.archlinux.org:q2pro-git
+	path = q2pro-git
