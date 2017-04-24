@@ -175,3 +175,6 @@
 [submodule "q2pro-git"]
 	url = aur@aur.archlinux.org:q2pro-git
 	path = q2pro-git
+[submodule "python-steamodd"]
+	url = aur@aur.archlinux.org:python-steamodd
+	path = python-steamodd
