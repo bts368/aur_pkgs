@@ -178,3 +178,6 @@
 [submodule "python-steamodd"]
 	url = aur@aur.archlinux.org:python-steamodd
 	path = python-steamodd
+[submodule "python-steamodd-git"]
+	url = aur@aur.archlinux.org:python-steamodd-git
+	path = python-steamodd-git
