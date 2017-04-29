@@ -181,3 +181,6 @@
 [submodule "python-steamodd-git"]
 	url = aur@aur.archlinux.org:python-steamodd-git
 	path = python-steamodd-git
+[submodule "python-pylibacl"]
+	url = aur@aur.archlinux.org:python-pylibacl
+	path = python-pylibacl
