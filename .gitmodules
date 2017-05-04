@@ -184,3 +184,6 @@
 [submodule "python-pylibacl"]
 	url = aur@aur.archlinux.org:python-pylibacl
 	path = python-pylibacl
+[submodule "aif"]
+	url = aur@aur.archlinux.org:aif
+	path = aif
