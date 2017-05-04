@@ -187,3 +187,6 @@
 [submodule "aif"]
 	url = aur@aur.archlinux.org:aif
 	path = aif
+[submodule "aif-git"]
+	url = aur@aur.archlinux.org:aif-git
+	path = aif-git
