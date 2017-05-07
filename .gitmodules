@@ -190,3 +190,6 @@
 [submodule "aif-git"]
 	url = aur@aur.archlinux.org:aif-git
 	path = aif-git
+[submodule "mtree-git"]
+	url = aur@aur.archlinux.org:mtree-git
+	path = mtree-git
