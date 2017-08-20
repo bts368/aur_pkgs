@@ -190,3 +190,6 @@
 [submodule "mtree-git"]
 	url = aur@aur.archlinux.org:mtree-git
 	path = mtree-git
+[submodule "python-inotify"]
+	url = aur@aur.archlinux.org:python-inotify
+	path = python-inotify
