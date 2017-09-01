@@ -193,3 +193,6 @@
 [submodule "python-inotify"]
 	url = aur@aur.archlinux.org:python-inotify
 	path = python-inotify
+[submodule "python-lrzip"]
+	url = aur@aur.archlinux.org:python-lrzip
+	path = python-lrzip
