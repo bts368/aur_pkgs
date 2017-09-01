@@ -196,3 +196,6 @@
 [submodule "python-lrzip"]
 	url = aur@aur.archlinux.org:python-lrzip
 	path = python-lrzip
+[submodule "lrzip-git"]
+	url = aur@aur.archlinux.org:lrzip-git
+	path = lrzip-git
