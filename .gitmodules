@@ -199,3 +199,6 @@
 [submodule "lrzip-git"]
 	url = aur@aur.archlinux.org:lrzip-git
 	path = lrzip-git
+[submodule "nroffedit"]
+	url = aur@aur.archlinux.org:nroffedit
+	path = nroffedit
