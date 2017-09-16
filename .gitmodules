@@ -205,3 +205,6 @@
 [submodule "python-pygpgme-rshk-git"]
 	url = aur@aur.archlinux.org:python-pygpgme-rshk-git
 	path = python-pygpgme-rshk-git
+[submodule "perl-app-asciio"]
+	url = aur@aur.archlinux.org:perl-app-asciio
+	path = perl-app-asciio
