@@ -208,3 +208,6 @@
 [submodule "perl-app-asciio"]
 	url = aur@aur.archlinux.org:perl-app-asciio
 	path = perl-app-asciio
+[submodule "python-whois"]
+	url = aur@aur.archlinux.org:python-whois
+	path = python-whois
