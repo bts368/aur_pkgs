@@ -211,9 +211,3 @@
 [submodule "python-whois"]
 	url = aur@aur.archlinux.org:python-whois
 	path = python-whois
-[submodule "python-lvm2py"]
-	url = aur@aur.archlinux.org:python-lvm2py
-	path = python-lvm2py
-[submodule "python-conversion"]
-	url = aur@aur.archlinux.org:python-conversion
-	path = python-conversion
