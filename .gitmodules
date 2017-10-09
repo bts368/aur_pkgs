@@ -211,3 +211,6 @@
 [submodule "python-whois"]
 	url = aur@aur.archlinux.org:python-whois
 	path = python-whois
+[submodule "python-mdstat"]
+	url = aur@aur.archlinux.org:python-mdstat
+	path = python-mdstat
