@@ -214,3 +214,6 @@
 [submodule "python-mdstat"]
 	url = aur@aur.archlinux.org:python-mdstat
 	path = python-mdstat
+[submodule "python-pyqrcode"]
+	url = aur@aur.archlinux.org:python-pyqrcode
+	path = python-pyqrcode
