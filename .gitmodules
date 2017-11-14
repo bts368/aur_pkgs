@@ -220,3 +220,6 @@
 [submodule "nmtree"]
 	url = aur@aur.archlinux.org:nmtree
 	path = nmtree
+[submodule "python-grpcio-tools"]
+	url = aur@aur.archlinux.org:python-grpcio-tools
+	path = python-grpcio-tools
