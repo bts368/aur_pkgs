@@ -226,3 +226,6 @@
 [submodule "python-grpcio"]
 	url = aur@aur.archlinux.org:python-grpcio
 	path = python-grpcio
+[submodule "dhcplease-git"]
+	url = aur@aur.archlinux.org:dhcplease-git
+	path = dhcplease-git
