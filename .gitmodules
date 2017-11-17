@@ -229,3 +229,6 @@
 [submodule "dhcplease-git"]
 	url = aur@aur.archlinux.org:dhcplease-git
 	path = dhcplease-git
+[submodule "dhcplease"]
+	url = aur@aur.archlinux.org:dhcplease
+	path = dhcplease
