@@ -232,3 +232,6 @@
 [submodule "dhcplease"]
 	url = aur@aur.archlinux.org:dhcplease
 	path = dhcplease
+[submodule "pisg-fixed"]
+	url = aur@aur.archlinux.org:pisg-fixed
+	path = pisg-fixed
