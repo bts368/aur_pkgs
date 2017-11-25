@@ -43,9 +43,6 @@
 [submodule "johnny-git"]
 	path = johnny-git
 	url = aur@aur.archlinux.org:johnny-git
-[submodule "kismet-allplugins"]
-	path = kismet-allplugins
-	url = aur@aur.archlinux.org:kismet-allplugins
 [submodule "libyuv-git"]
 	path = libyuv-git
 	url = aur@aur.archlinux.org:libyuv-git

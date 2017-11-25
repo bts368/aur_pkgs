@@ -12,3 +12,25 @@ in README, need to mention HOW to use scripts- and how to sign packages, how to 
 python rewrite of new packages is almost done. the biggest part is done, anyways- still need the other menu options fleshed out and to bring it all together under a __main__
 
 python packages: see https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=python-gitdb2 for example
+
+
+-remove python-conversion
+-fix the whole fucking thing with pisg-fixed
+
+
+can i use beautifulsoul/urllib/etc. to submit a comment once the package is added? if so:
+
+# Bug reports can be filed at https://bugs.square-r00t.net/index.php?project=3
+# News updates for packages can be followed at https://devblog.square-r00t.net
+
+(If you want an RSS-feed only pertaining to my AUR packages, you can subscribe to https://devblog.square-r00t.net/rss/?category=aur in your favourite RSS reader.)
+
+Note that you should still use the AUR web interface for flagging packages as out-of-date if a new version is released; the aforementioned bug tracker is to aid in issues with building/packaging/the PKGBUILD formats/etc. specifically.
+
+GPG signature "errors" are explained here:
+https://devblog.square-r00t.net/articles/a-note-on-using-gpg-signatures-in-pkgbuilds
+
+Please read; it's not a bug.
+
+
+Thanks!
