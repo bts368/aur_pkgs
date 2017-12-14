@@ -232,3 +232,6 @@
 [submodule "pisg"]
 	url = aur@aur.archlinux.org:pisg
 	path = pisg
+[submodule "zandronum"]
+	url = aur@aur.archlinux.org:zandronum
+	path = zandronum
