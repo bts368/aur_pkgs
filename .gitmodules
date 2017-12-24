@@ -139,9 +139,6 @@
 [submodule "nquakesv"]
 	path = nquakesv
 	url = aur@aur.archlinux.org:nquakesv
-[submodule "python-zconfig"]
-	path = python-zconfig
-	url = aur@aur.archlinux.org:python-zconfig
 [submodule "python-menu3"]
 	path = python-menu3
 	url = aur@aur.archlinux.org:python-menu3
