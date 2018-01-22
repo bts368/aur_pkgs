@@ -232,3 +232,6 @@
 [submodule "zandronum"]
 	url = aur@aur.archlinux.org:zandronum
 	path = zandronum
+[submodule "chromedriver-dev"]
+	url = aur@aur.archlinux.org:chromedriver-dev
+	path = chromedriver-dev
