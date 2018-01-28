@@ -235,3 +235,6 @@
 [submodule "chromedriver-dev"]
 	url = aur@aur.archlinux.org:chromedriver-dev
 	path = chromedriver-dev
+[submodule "rainbowcrack"]
+	url = aur@aur.archlinux.org:rainbowcrack
+	path = rainbowcrack
