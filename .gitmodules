@@ -238,3 +238,9 @@
 [submodule "rainbowcrack"]
 	url = aur@aur.archlinux.org:rainbowcrack
 	path = rainbowcrack
+[submodule "sks-local"]
+	path = sks-local
+	url = aur@aur.archlinux.org:sks-local
+[submodule "python-libguestfs"]
+	url = aur@aur.archlinux.org:python-libguestfs
+	path = python-libguestfs
