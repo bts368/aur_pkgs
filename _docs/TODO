@@ -15,7 +15,14 @@ python packages: see https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=pyth
 
 
 -remove python-conversion
--fix the whole fucking thing with pisg-fixed
+
+- todo: package:
+ruby-prawn
+ruby-addressable
+ruby-prawn-svg
+ruby-prawn-templates
+asciidoctor-pdf
+http://asciidoctor.org/docs/asciidoctor-pdf/#prerequisites
 
 
 can i use beautifulsoul/urllib/etc. to submit a comment once the package is added? if so:
@@ -34,3 +41,10 @@ Please read; it's not a bug.
 
 
 Thanks!
+
+
+
+
+devtools to test build on clean system: https://wiki.archlinux.org/index.php/DeveloperWiki:Building_in_a_clean_chroot#Convenience_way
+
+change mksrcinfo to https://wiki.archlinux.org/index.php/.SRCINFO#Generation!!!
