@@ -238,3 +238,6 @@
 [submodule "python-hashid"]
 	url = aur@aur.archlinux.org:python-hashid
 	path = python-hashid
+[submodule "chkrootkit"]
+	url = aur@aur.archlinux.org:chkrootkit
+	path = chkrootkit
