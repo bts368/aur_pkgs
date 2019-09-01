@@ -73,9 +73,6 @@
 [submodule "python2-dpkt"]
 	path = python2-dpkt
 	url = aur@aur.archlinux.org:python2-dpkt
-[submodule "python-semantic_version"]
-	path = python-semantic_version
-	url = aur@aur.archlinux.org:python-semantic_version
 [submodule "quake2world-data-git"]
 	path = quake2world-data-git
 	url = aur@aur.archlinux.org:quake2world-data-git
