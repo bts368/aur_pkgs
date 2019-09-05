@@ -238,3 +238,6 @@
 [submodule "chkrootkit"]
 	url = aur@aur.archlinux.org:chkrootkit
 	path = chkrootkit
+[submodule "3proxy-git"]
+	url = aur@aur.archlinux.org:3proxy-git
+	path = 3proxy-git
