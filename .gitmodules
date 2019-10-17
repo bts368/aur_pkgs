@@ -241,3 +241,6 @@
 [submodule "3proxy-git"]
 	url = aur@aur.archlinux.org:3proxy-git
 	path = 3proxy-git
+[submodule "python-blkinfo"]
+	url = aur@aur.archlinux.org:python-blkinfo
+	path = python-blkinfo
