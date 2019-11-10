@@ -244,3 +244,6 @@
 [submodule "python-blkinfo"]
 	url = aur@aur.archlinux.org:python-blkinfo
 	path = python-blkinfo
+[submodule "pixiecore-git"]
+	path = pixiecore-git
+	url = aur@aur.archlinux.org:pixiecore-git
