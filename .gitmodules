@@ -247,3 +247,6 @@
 [submodule "pixiecore-git"]
 	path = pixiecore-git
 	url = aur@aur.archlinux.org:pixiecore-git
+[submodule "python-pyrad"]
+	url = aur@aur.archlinux.org:python-pyrad
+	path = python-pyrad
