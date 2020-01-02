@@ -79,9 +79,6 @@
 [submodule "quake2world-git"]
 	path = quake2world-git
 	url = aur@aur.archlinux.org:quake2world-git
-[submodule "rcracki_mt"]
-	path = rcracki_mt
-	url = aur@aur.archlinux.org:rcracki_mt
 [submodule "scrounge-ntfs"]
 	path = scrounge-ntfs
 	url = aur@aur.archlinux.org:scrounge-ntfs
