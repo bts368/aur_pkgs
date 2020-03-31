@@ -247,3 +247,6 @@
 [submodule "python-pyrad"]
 	url = aur@aur.archlinux.org:python-pyrad
 	path = python-pyrad
+[submodule "python-dpath"]
+	url = aur@aur.archlinux.org:python-dpath
+	path = python-dpath
