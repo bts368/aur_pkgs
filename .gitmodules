@@ -250,3 +250,6 @@
 [submodule "python-dpath"]
 	url = aur@aur.archlinux.org:python-dpath
 	path = python-dpath
+[submodule "python-pyhcl"]
+	url = aur@aur.archlinux.org:python-pyhcl
+	path = python-pyhcl
