@@ -253,3 +253,6 @@
 [submodule "python-pyhcl"]
 	url = aur@aur.archlinux.org:python-pyhcl
 	path = python-pyhcl
+[submodule "zandronum-bin"]
+	url = aur@aur.archlinux.org:zandronum-bin
+	path = zandronum-bin
