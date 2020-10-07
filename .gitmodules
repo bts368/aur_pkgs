@@ -256,3 +256,6 @@
 [submodule "zandronum-bin"]
 	url = aur@aur.archlinux.org:zandronum-bin
 	path = zandronum-bin
+[submodule "nquake-common"]
+	url = aur@aur.archlinux.org:nquake-common
+	path = nquake-common
