@@ -52,15 +52,6 @@
 [submodule "mdcrack"]
 	path = mdcrack
 	url = aur@aur.archlinux.org:mdcrack
-[submodule "mindi"]
-	path = mindi
-	url = aur@aur.archlinux.org:mindi
-[submodule "mindi-busybox"]
-	path = mindi-busybox
-	url = aur@aur.archlinux.org:mindi-busybox
-[submodule "mondo"]
-	path = mondo
-	url = aur@aur.archlinux.org:mondo
 [submodule "nquake"]
 	path = nquake
 	url = aur@aur.archlinux.org:nquake
